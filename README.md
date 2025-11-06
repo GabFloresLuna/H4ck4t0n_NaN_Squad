@@ -8,6 +8,9 @@ Desarrollar un sistema híbrido (ML + LLM + RAG) capaz de:
 - Recomendar planes personalizados.
 
 ## Estructura del proyecto
+## 🗂️ Estructura del proyecto
+
+```text
 education-hackathon-Duoc/
 ├── data/              # Datasets (rendimiento, asistencia, deserción)
 ├── kb/                # Base de conocimiento local (RAG)
@@ -16,6 +19,7 @@ education-hackathon-Duoc/
 ├── app/               # App demo (Streamlit/Gradio)
 ├── requirements.txt   # Dependencias
 └── README.md          # Documentación principal
+```
 
 ## H4ck4t0n_NaN_Squad – Hackathon Duoc UC 2025
   - Cristopher Ormazabal
