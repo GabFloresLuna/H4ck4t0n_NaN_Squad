@@ -12,13 +12,22 @@ Desarrollar un sistema híbrido (ML + LLM + RAG) capaz de:
 
 ```text
 education-hackathon-Duoc/
-├── data/              # Datasets (rendimiento, asistencia, deserción)
-├── kb/                # Base de conocimiento local (RAG)
-├── src/               # Código ML, RAG, validadores
-├── api/               # FastAPI endpoints (/predict, /coach)
-├── app/               # App demo (Streamlit/Gradio)
-├── requirements.txt   # Dependencias
-└── README.md          # Documentación principal
+├── data/ # CSVs, modelos entrenados, etc.
+├── kb/ # Base de conocimiento local (Markdown para el Coach)
+│
+├── src/ # Código fuente principal
+│ ├── model.py # Entrenamiento y carga del modelo ML
+│ ├── features.py # Ingeniería de variables
+│ └── utils.py # Funciones auxiliares
+│
+├── api/
+│ └── main.py # API FastAPI
+│
+├── app/
+│ └── app.py # Streamlit o Gradio (demo)
+│
+├── requirements.txt # Dependencias del proyecto
+└── README.md # Documentación del proyecto
 ```
 
 ## H4ck4t0n_NaN_Squad – Hackathon Duoc UC 2025
