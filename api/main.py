@@ -1,67 +1,62 @@
 import os
-import joblib
 import pandas as pd
+import joblib
 from typing import List, Dict, Any, Union
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from huggingface_hub import hf_hub_download
 
 # =========================
-# Cargar modelo sklearn (.pkl o .joblib)
+# Config del modelo en HF Hub
 # =========================
-MODEL = None
-for cand in ["model.pkl", "model.joblib", "models/model.pkl", "models/model.joblib"]:
-    if os.path.exists(cand):
-        try:
-            MODEL = joblib.load(cand)
-            print(f"[INFO] Modelo cargado desde: {cand}")
-            break
-        except Exception as e:
-            print(f"[WARN] No se pudo cargar {cand}: {e}")
+HF_MODEL_REPO = os.getenv("HF_MODEL_REPO", "ramen159/model-agente-continuidad")
+HF_MODEL_FILE = os.getenv("HF_MODEL_FILE", "modelo_desercion.pkl")
+
+print(f"[INFO] Descargando modelo desde HuggingFace Hub: {HF_MODEL_REPO}/{HF_MODEL_FILE}")
+try:
+    model_path = hf_hub_download(
+        repo_id=HF_MODEL_REPO,
+        filename=HF_MODEL_FILE,
+        force_download=False  # usa caché si ya existe
+    )
+    MODEL = joblib.load(model_path)
+    print("[INFO] Modelo cargado correctamente ✅")
+except Exception as e:
+    print(f"[ERROR] No se pudo cargar el modelo: {e}")
+    MODEL = None
 
 # =========================
-# Definir estructura de input
+# Schemas de entrada
 # =========================
 class ChatBody(BaseModel):
     messages: List[Dict[str, str]]
 
 class PredictBody(BaseModel):
-    # Puede venir un diccionario o una lista de diccionarios
     data: Union[Dict[str, Any], List[Dict[str, Any]]]
 
 # =========================
-# Crear la API
+# API FastAPI
 # =========================
-app = FastAPI(title="API Chat + Predict")
+app = FastAPI(title="API Continuidad Académica")
 
 @app.post("/chat")
 def chat(body: ChatBody):
-    """
-    Chat mínimo: responde con eco/placeholder.
-    Luego puedes reemplazarlo con tu propia lógica (por ejemplo, LLM).
-    """
-    last_user_message = next(
-        (m["content"] for m in reversed(body.messages) if m["role"] == "user"),
-        ""
-    )
-    if not last_user_message:
-        return {"reply": "¿En qué te ayudo?"}
-    return {"reply": f"Recibí tu mensaje: {last_user_message}"}
+    last_user_msg = next((m["content"] for m in reversed(body.messages) if m["role"] == "user"), "")
+    if not last_user_msg:
+        return {"reply": "¿En qué te puedo ayudar?"}
+    return {"reply": f"Recibí tu mensaje: {last_user_msg}"}
 
 @app.post("/predict")
 def predict(body: PredictBody):
     if MODEL is None:
-        raise HTTPException(status_code=501, detail="No se encontró el modelo 'model.pkl' o 'model.joblib'.")
+        raise HTTPException(status_code=500, detail="Modelo no cargado en memoria.")
 
     rows = body.data if isinstance(body.data, list) else [body.data]
     try:
         df = pd.DataFrame(rows)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error al convertir entrada a DataFrame: {e}")
+        raise HTTPException(status_code=400, detail=f"Formato de entrada inválido: {e}")
 
     try:
         preds = MODEL.predict(df)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error durante la predicción: {e}")
-
-    preds = [float(p) if hasattr(p, "item") else p for p in preds]
-    return {"predictions": preds}
+    except Exception as
