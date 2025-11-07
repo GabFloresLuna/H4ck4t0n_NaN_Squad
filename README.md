@@ -26,3 +26,37 @@ education-hackathon-Duoc/
   - Cristobal Pardo
   - Dante Valle
   - Gabriel Flores
+# 🎓 API Tutor Virtual - Hackathon Duoc UC 2025
+
+## 🚀 Descripción
+Esta API predice el **riesgo académico de los estudiantes** y entrega un **plan de acción personalizado (coach)**.  
+Está desarrollada con **FastAPI** y se encuentra actualmente **operativa en la nube**.
+
+---
+
+## 🌐 Enlace Público
+**Base URL:**  
+https://bedroom-injection-winners-print.trycloudflare.com
+
+**Documentación (Swagger UI):**  
+https://bedroom-injection-winners-print.trycloudflare.com/docs
+
+---
+
+## 📈 Endpoint: `/predict`
+**Método:** `POST`  
+**Descripción:** Predice el riesgo académico según características del estudiante.
+
+### Ejemplo de entrada:
+```json
+{
+  "age": 17,
+  "sex": "M",
+  "school": "Liceo Técnico",
+  "subject": "Matemáticas",
+  "attendance_pct": 75,
+  "grade_mean": 4.1,
+  "num_absences": 10,
+  "socioeconomic_status": "low"
+}
+```
