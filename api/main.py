@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict, Any, Union
-
+from rag import get_rag
 import joblib
 import numpy as np
 import pandas as pd
@@ -186,3 +186,15 @@ def predict(body: PredictBody):
 
     preds = [float(p) if hasattr(p, "item") else p for p in preds]
     return {"predictions": preds, "rows": len(preds)}
+# --- al final de api/main.py ---
+try:
+    from ui import build_demo
+    import gradio as gr
+    from gradio.routes import mount_gradio_app
+
+    demo = build_demo()
+    # Monta la interfaz en la raíz "/"
+    app = mount_gradio_app(app, demo, path="/")
+    print("[INFO] Gradio UI montada en '/'")
+except Exception as e:
+    print(f"[WARN] No se pudo montar la UI de Gradio: {e}")

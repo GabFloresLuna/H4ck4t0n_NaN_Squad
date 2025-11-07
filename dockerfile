@@ -1,15 +1,14 @@
-FROM python:3.10
+FROM python:3.10-slim
 
 WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia todo el repo
 COPY . .
 
-# Expone el puerto de FastAPI
+RUN chmod +x app.sh
+
 EXPOSE 7860
 
-# Comando de ejecución
 CMD ["bash", "app.sh"]

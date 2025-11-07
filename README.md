@@ -1,71 +1,73 @@
-## Hackathon Duoc UC 2025
-Tutor Virtual Adaptativo con IA Híbrida para estimar riesgo de deserción y ofrecer planes personalizados.
+# 🧠 Tutor Virtual de Continuidad Académica  
+*Hackathon Duoc UC 2025 — Equipo H4ck4t0n_NaN_Squad*
 
-## Objetivo
-Desarrollar un sistema híbrido (ML + LLM + RAG) capaz de:
-- Estimar riesgo de deserción escolar.
-- Explicar las variables relevantes.
-- Recomendar planes personalizados.
+Este proyecto implementa un **sistema inteligente híbrido** que combina:
 
-## Estructura del proyecto
-## 🗂️ Estructura del proyecto
+| Componente | Tecnología |
+|------------|------------|
+| Modelo de riesgo de deserción | Scikit-Learn (cargado desde HuggingFace Hub) |
+| API backend | FastAPI + Uvicorn |
+| Motor de recomendaciones | RAG basado en Markdown local |
+| Interfaz web | Gradio (integrada en el mismo contenedor) |
+| Despliegue | Hugging Face Spaces (Docker) |
 
-```text
-education-hackathon-Duoc/
-├── data/ # CSVs, modelos entrenados, etc.
-├── kb/ # Base de conocimiento local (Markdown para el Coach)
-│
-├── src/ # Código fuente principal
-│ ├── model.py # Entrenamiento y carga del modelo ML
-│ ├── features.py # Ingeniería de variables
-│ └── utils.py # Funciones auxiliares
-│
+---
+## Estructura del repo
+.
 ├── api/
-│ └── main.py # API FastAPI
-│
-├── app/
-│ └── app.py # Streamlit o Gradio (demo)
-│
-├── requirements.txt # Dependencias del proyecto
-└── README.md # Documentación del proyecto
-```
+│   └── main.py           # Backend FastAPI + RAG + UI
+├── kb/                   # Markdown con recomendaciones
+│   ├── habitos_estudio.md
+│   └── salud_mental.md
+├── app.sh                # Comando de ejecución (opcional)
+├── Dockerfile            # Space basado en Docker
+├── requirements.txt
+└── README.md
+
+
+## 🎯 Objetivo
+
+1. **Predecir el riesgo académico** (`0 = sin riesgo`, `1 = riesgo alto`)
+2. **Explicar y acompañar al estudiante** si hay riesgo → entregando **recomendaciones personalizadas**
+3. **RAG liviano offline**: extrae tips desde archivos `.md` ubicados en `/kb`
+
+---
+
+## 🧩 Arquitectura
+
 
 ## H4ck4t0n_NaN_Squad – Hackathon Duoc UC 2025
   - Cristopher Ormazabal
   - Cristobal Pardo
   - Dante Valle
   - Gabriel Flores
-# 🎓 API Tutor Virtual - Hackathon Duoc UC 2025
 
-## 🚀 Descripción
-Esta API predice el **riesgo académico de los estudiantes** y entrega un **plan de acción personalizado (coach)**.  
-Está desarrollada con **FastAPI** y se encuentra actualmente **operativa en la nube**.
+┌─────────────┐ ┌──────────────┐ ┌──────────────┐
+│ FastAPI │ --> │ Modelo ML │ --> │ Predicción │
+└─────┬───────┘ └──────────────┘ └──────┬───────┘
+│ (si = 1)
+▼
+┌──────────────┐ RAG Markdown ┌─────────────────────────┐
+│ Recomendador│ <────────────── │ /kb/*.md (tips + guías) │
+└──────────────┘ └─────────────────────────┘
 
----
 
-## 🌐 Enlace Público
-**Base URL:**  
-https://bedroom-injection-winners-print.trycloudflare.com
 
-**Documentación (Swagger UI):**  
-https://bedroom-injection-winners-print.trycloudflare.com/docs
+## 📌 JSON de ejemplo válido (9 features requeridos)
 
----
-
-## 📈 Endpoint: `/predict`
-**Método:** `POST`  
-**Descripción:** Predice el riesgo académico según características del estudiante.
-
-### Ejemplo de entrada:
 ```json
 {
-  "age": 17,
-  "sex": "M",
-  "school": "Liceo Técnico",
-  "subject": "Matemáticas",
-  "attendance_pct": 75,
-  "grade_mean": 4.1,
-  "num_absences": 10,
-  "socioeconomic_status": "low"
+  "data": {
+    "COD_ENSE": "110",
+    "NOM_RBD": "LICEO EJEMPLO",
+    "COD_JOR": "1",
+    "COD_GRADO": "7",
+    "NOM_COM_RBD": "SANTIAGO",
+    "NOM_COM_ALU": "SANTIAGO",
+    "NOM_DEPROV_RBD": "SANTIAGO",
+    "NOM_REG_RBD_A": "REGIÓN METROPOLITANA",
+    "COD_DEPE": "Municipal DAEM"
+  }
 }
-```
+
+
