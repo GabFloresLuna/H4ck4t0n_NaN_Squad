@@ -188,6 +188,17 @@ def predict(body: PredictBody):
     return {"predictions": preds, "rows": len(preds)}
 # --- al final de api/main.py ---
 try:
+    from rag import get_recommendations
+
+    # ...
+    # si la predicción del modelo es 1 (riesgo alto):
+    texto = get_recommendations(
+        prompt="hábitos de estudio y continuidad académica para estudiante con riesgo alto",
+        max_files=2,
+        tips_per_file=3
+    )
+# devuelve texto en bullet points agrupado por archivo
+
     from ui import build_demo
     import gradio as gr
     from gradio.routes import mount_gradio_app
@@ -198,3 +209,4 @@ try:
     print("[INFO] Gradio UI montada en '/'")
 except Exception as e:
     print(f"[WARN] No se pudo montar la UI de Gradio: {e}")
+
