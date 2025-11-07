@@ -52,6 +52,7 @@ def predict(body: PredictBody):
         raise HTTPException(status_code=500, detail="Modelo no cargado en memoria.")
 
     rows = body.data if isinstance(body.data, list) else [body.data]
+
     try:
         df = pd.DataFrame(rows)
     except Exception as e:
@@ -59,4 +60,8 @@ def predict(body: PredictBody):
 
     try:
         preds = MODEL.predict(df)
-    except Exception as
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al predecir: {e}")
+
+    preds = [float(p) if hasattr(p, "item") else p for p in preds]
+    return {"predictions": preds}
