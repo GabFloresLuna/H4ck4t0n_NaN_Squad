@@ -12,18 +12,6 @@ Este proyecto implementa un **sistema inteligente híbrido** que combina:
 | Despliegue | Hugging Face Spaces (Docker) |
 
 ---
-## Estructura del repo
-.
-├── api/
-│   └── main.py           # Backend FastAPI + RAG + UI
-├── kb/                   # Markdown con recomendaciones
-│   ├── habitos_estudio.md
-│   └── salud_mental.md
-├── app.sh                # Comando de ejecución (opcional)
-├── Dockerfile            # Space basado en Docker
-├── requirements.txt
-└── README.md
-
 
 ## 🎯 Objetivo
 
@@ -31,26 +19,12 @@ Este proyecto implementa un **sistema inteligente híbrido** que combina:
 2. **Explicar y acompañar al estudiante** si hay riesgo → entregando **recomendaciones personalizadas**
 3. **RAG liviano offline**: extrae tips desde archivos `.md` ubicados en `/kb`
 
----
-
-## 🧩 Arquitectura
-
 
 ## H4ck4t0n_NaN_Squad – Hackathon Duoc UC 2025
   - Cristopher Ormazabal
   - Cristobal Pardo
   - Dante Valle
   - Gabriel Flores
-
-┌─────────────┐ ┌──────────────┐ ┌──────────────┐
-│ FastAPI │ --> │ Modelo ML │ --> │ Predicción │
-└─────┬───────┘ └──────────────┘ └──────┬───────┘
-│ (si = 1)
-▼
-┌──────────────┐ RAG Markdown ┌─────────────────────────┐
-│ Recomendador│ <────────────── │ /kb/*.md (tips + guías) │
-└──────────────┘ └─────────────────────────┘
-
 
 
 ## 📌 JSON de ejemplo válido (9 features requeridos)
